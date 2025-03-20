@@ -1,0 +1,19 @@
+techLead: Benjamin
+candidates:
+  - David
+  - Heng
+  - Tino
+  - Steven
+  - Richard
+  - Jacky
+  - Stoney
+  - Tom
+  - Ada
+  - Arden
+  - Bill
+  - Bo-Yin
+  - Joe
+  - Bruce
+techLeadRate: 50
+voteValueRangeLower: 1
+voteValueRangeUpper: 5
