@@ -82,7 +82,13 @@ public class KafkaProducerDemo {
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "io.confluent.kafka.serializers.KafkaAvroSerializer");
         props.put("schema.registry.url", "http://schema-registry:8081");
-        //        props.put("batch.size", 100);
+
+        // load batch size from config yaml
+        Map<String, Object> yamlConfig = loadYamlConfig();
+        Object batchSize = yamlConfig.get("batch.size");
+        if (batchSize instanceof Number) {
+            props.put("batch.size", ((Number) batchSize).intValue());
+        }
 
         // use interceptor to log result
         props.put("interceptor.classes", "com.example.LoggingInterceptor");
@@ -93,7 +99,7 @@ public class KafkaProducerDemo {
             props.put("partitioner.ignore.keys", "true");
         }
 
-      return new KafkaProducer<>(props);
+        return new KafkaProducer<>(props);
     }
 
     private static void createTopicWithSpecifiedPartitionCount(String topic, int partitions) {
@@ -114,5 +120,16 @@ public class KafkaProducerDemo {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static Map<String, Object> loadYamlConfig() {
+        org.yaml.snakeyaml.Yaml yaml = new org.yaml.snakeyaml.Yaml();
+        Map<String, Object> yamlConfig = new HashMap<>();
+        try (java.io.InputStream inputStream = new java.io.FileInputStream("./configuration/producer-config.yaml")) {
+            yamlConfig = yaml.load(inputStream);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+        return yamlConfig != null ? yamlConfig : new HashMap<>();
     }
 }
