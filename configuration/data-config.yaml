@@ -1,4 +1,5 @@
 techLead: Benjamin
+techLeadRate: 50
 candidates:
   - David
   - Heng
@@ -14,6 +15,9 @@ candidates:
   - Bo-Yin
   - Joe
   - Bruce
-techLeadRate: 50
+  - Cheryl
+  - Jacob
+  - Hung-Wei
+  - Johnny
 voteValueRangeLower: 1
 voteValueRangeUpper: 5
