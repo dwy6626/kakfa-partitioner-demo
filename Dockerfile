@@ -9,4 +9,4 @@ RUN mvn package
 FROM openjdk:11-jre
 WORKDIR /app
 COPY --from=build /app/target/kafka-demo-1.0-SNAPSHOT.jar kafka-demo.jar
-CMD ["java", "-jar", "kafka-demo.jar"]
+ENTRYPOINT ["java", "-jar", "kafka-demo.jar"]

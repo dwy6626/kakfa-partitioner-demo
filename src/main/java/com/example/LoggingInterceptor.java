@@ -27,10 +27,12 @@ public class LoggingInterceptor implements ProducerInterceptor<String, String> {
     @Override
     public void close() {
         // resource cleanup
+        System.out.println("[Interceptor] closing interceptor");
     }
     
     @Override
     public void configure(Map<String, ?> configs) {
         // configure interceptor
+        System.out.println("configuring LoggingInterceptor with producer config: " + configs);
     }
 }

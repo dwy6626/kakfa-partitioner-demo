@@ -2,6 +2,8 @@ services:
   # run kafka on KRaft, no zookeeper needed
   kafka:
     image: confluentinc/cp-kafka:latest
+    ports:
+      - 9092:9092
     container_name: kafka
     environment:
       KAFKA_BROKER_ID: 1
@@ -19,12 +21,3 @@ services:
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_NUM_PARTITIONS: 4
-
-  demo:
-    build: .
-    depends_on:
-      - kafka
-    volumes:
-      - ./configuration:/app/configuration
-
-
