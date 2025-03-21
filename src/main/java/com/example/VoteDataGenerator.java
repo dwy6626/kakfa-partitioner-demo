@@ -9,6 +9,7 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import com.example.Vote;
 
 public class VoteDataGenerator {
 
@@ -47,20 +48,21 @@ public class VoteDataGenerator {
         loadConfig();
     }
 
-    public ProducerRecord<String, String> generateVote(String topic) {
-        String key;
+    public ProducerRecord<String, Vote> generateVote(String topic) {
+        String candidate;
         int r = random.nextInt(100);
         if (r < techLeadRate) {
-            key = techLead;
+            candidate = techLead;
         } else {
-            key = candidates[random.nextInt(candidates.length)];
+            candidate = candidates[random.nextInt(candidates.length)];
         }
-        String value = String.valueOf(random.nextInt(voteValueRangeUpper - voteValueRangeLower) + voteValueRangeLower);
-        return new ProducerRecord<>(topic, key, value);
+        int voteValue = random.nextInt(voteValueRangeUpper - voteValueRangeLower) + voteValueRangeLower;
+        Vote voteObj = new Vote(candidate, voteValue);
+        return new ProducerRecord<>(topic, candidate, voteObj);
     }
 
-    public List<ProducerRecord<String, String>> generateVotes(String topic, int count) {
-        List<ProducerRecord<String, String>> records = new ArrayList<>();
+    public List<ProducerRecord<String, Vote>> generateVotes(String topic, int count) {
+        List<ProducerRecord<String, Vote>> records = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             records.add(generateVote(topic));
         }

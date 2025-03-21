@@ -1,2 +1,4 @@
 docker-compose.xml
 configuration
+dependency-reduced-pom.xml
+README.md

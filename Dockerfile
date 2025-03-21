@@ -8,5 +8,5 @@ RUN mvn package
 # Stage 2: Run the application using a lightweight JRE image
 FROM openjdk:11-jre
 WORKDIR /app
-COPY --from=build /app/target/kafka-demo-1.0-SNAPSHOT.jar kafka-demo.jar
+COPY --from=build /app/target/kafka-demo-1.0.jar kafka-demo.jar
 ENTRYPOINT ["java", "-jar", "kafka-demo.jar"]

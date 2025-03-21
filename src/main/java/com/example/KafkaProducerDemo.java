@@ -6,6 +6,7 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.*;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import com.example.Vote;
 
 public class KafkaProducerDemo {
 
@@ -51,14 +52,14 @@ public class KafkaProducerDemo {
 
     private static void runDemo(String topic, boolean ignoreKeys, int numPartitions, String partitionerClass) {
         createTopicWithSpecifiedPartitionCount(topic, numPartitions);
-        KafkaProducer<String, String> producer = getProducer(ignoreKeys, partitionerClass);
+        KafkaProducer<String, Vote> producer = getProducer(ignoreKeys, partitionerClass);
 
         VoteDataGenerator generator = new VoteDataGenerator();
-        List<ProducerRecord<String, String>> votes = generator.generateVotes(topic, 100);
+        List<ProducerRecord<String, Vote>> votes = generator.generateVotes(topic, 100);
 
         Map<Integer, Integer> partitionCount = new HashMap<>();
 
-        for (ProducerRecord<String, String> record : votes) {
+        for (ProducerRecord<String, Vote> record : votes) {
             try {
                 RecordMetadata metadata = producer.send(record).get();
                 int partition = metadata.partition();
@@ -75,12 +76,13 @@ public class KafkaProducerDemo {
         }
     }
 
-    private static KafkaProducer<String, String> getProducer(boolean ignoreKeys, String partitionerClass) {
+    private static KafkaProducer<String, Vote> getProducer(boolean ignoreKeys, String partitionerClass) {
         Properties props = new Properties();
         props.put("bootstrap.servers", brokerUrl);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-//        props.put("batch.size", 100);
+        props.put("value.serializer", "io.confluent.kafka.serializers.KafkaAvroSerializer");
+        props.put("schema.registry.url", "http://schema-registry:8081");
+        //        props.put("batch.size", 100);
 
         // use interceptor to log result
         props.put("interceptor.classes", "com.example.LoggingInterceptor");

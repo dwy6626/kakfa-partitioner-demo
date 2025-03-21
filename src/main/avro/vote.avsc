@@ -1,0 +1,9 @@
+{
+  "namespace": "com.example",
+  "type": "record",
+  "name": "Vote",
+  "fields": [
+    { "name": "candidate", "type": "string" },
+    { "name": "vote", "type": "int" }
+  ]
+}
